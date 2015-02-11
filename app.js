@@ -1,11 +1,18 @@
 var express = require('express');
 var morgan = require('morgan');
+var swig = require('swig');
 
 var twitterApp = express();
 twitterApp.use(morgan('dev'));
 
+twitterApp.engine('html', swig.renderFile);
+twitterApp.set('view engine', 'html');
+twitterApp.set('views', __dirname + '/views');
+swig.setDefaults({ cache: false });
+
 twitterApp.get('/', function(req, res) {
-	res.send('Hello World!');
+	var people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
+	res.render( 'index', {title: 'Hall of Fame', people: people} );
 });
 
 twitterApp.get('/news', function(req, res) {
